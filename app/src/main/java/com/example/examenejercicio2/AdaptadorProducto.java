@@ -70,13 +70,6 @@ public class AdaptadorProducto extends RecyclerView.Adapter<AdaptadorProducto.Pr
         }
     }
 
-    //Método para actualizar el total de productos y precio
-    private void actualizarTotal() {
-        int numeroDeProductos = repositorioProducto.obtenerNumeroDeProductos();
-        double precioTotal = repositorioProducto.obtenerPrecioTotal();
-        tvTotal.setText("Productos: " + numeroDeProductos + " - Total: " + precioTotal + "€");
-    }
-
     //Interfaz para manejar el clic en el ítem del producto
     public interface OnItemClickListener {
         void onItemClick(Producto producto);

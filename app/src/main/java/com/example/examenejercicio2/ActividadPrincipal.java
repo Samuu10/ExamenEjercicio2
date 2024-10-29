@@ -47,22 +47,27 @@ public class ActividadPrincipal extends AppCompatActivity {
 
     //Método para mostrar un diálogo de añadir un producto
     private void mostrarDialogoAgregarProducto() {
+
+        //Creación del diálogo
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialogo_agregar_producto, null);
         builder.setView(dialogView);
         builder.setTitle("Añadir Producto");
 
+        //Asignación de los elementos del diálogo a variables
         EditText etNombre = dialogView.findViewById(R.id.etNombre);
         EditText etCantidad = dialogView.findViewById(R.id.etCantidad);
         EditText etPrecio = dialogView.findViewById(R.id.etPrecio);
 
+        //Configuración de los botones del diálogo
         builder.setPositiveButton("Añadir", null);
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
 
+        //Configuración del botón de añadir
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String nombre = etNombre.getText().toString().trim();
             if (nombre.isEmpty()) {
@@ -73,6 +78,7 @@ public class ActividadPrincipal extends AppCompatActivity {
             int cantidad = etCantidad.getText().toString().isEmpty() ? 1 : Integer.parseInt(etCantidad.getText().toString());
             double precio = etPrecio.getText().toString().isEmpty() ? 0 : Double.parseDouble(etPrecio.getText().toString());
 
+            //Añadir el producto al repositorio y actualizar la lista y el total
             Producto producto = new Producto(nombre, cantidad, precio);
             repositorioProducto.añadirProducto(producto);
             adaptadorProducto.notifyDataSetChanged();
@@ -83,6 +89,8 @@ public class ActividadPrincipal extends AppCompatActivity {
 
     //Método para mostrar un diálogo de eliminación de un producto
     private void mostrarDialogoEliminarProducto(Producto producto) {
+
+        //Creación del diálogo
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Eliminar Producto");
         builder.setMessage("¿Estás seguro de que deseas eliminar este producto?");
@@ -92,6 +100,7 @@ public class ActividadPrincipal extends AppCompatActivity {
             actualizarTotal();
             dialog.dismiss();
         });
+
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
