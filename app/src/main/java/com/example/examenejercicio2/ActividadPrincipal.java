@@ -25,7 +25,7 @@ public class ActividadPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actividad_principal);
 
-        repositorioProducto = new RepositorioProducto();
+        repositorioProducto = new RepositorioProducto(this);
         tvTotal = findViewById(R.id.total);
         Button botonAñadirProducto = findViewById(R.id.boton_añadir_producto);
 
@@ -42,8 +42,10 @@ public class ActividadPrincipal extends AppCompatActivity {
         });
 
         adaptadorProducto.setOnItemClickListener(producto -> mostrarDialogoEliminarProducto(producto));
+        actualizarTotal();
     }
 
+    //Método para mostrar un diálogo de añadir un producto
     private void mostrarDialogoAgregarProducto() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
