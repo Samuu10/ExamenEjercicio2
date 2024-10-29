@@ -1,11 +1,9 @@
 package com.example.examenejercicio2;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +44,7 @@ public class AdaptadorProducto extends RecyclerView.Adapter<AdaptadorProducto.Pr
         holder.tvCantidad.setText("x" + cantidad + "  -");
         holder.tvPrecio.setText(producto.getPrecio() + "€");
 
+        //Manejamos el evento clic en el ítem del producto
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(producto);
@@ -59,7 +58,7 @@ public class AdaptadorProducto extends RecyclerView.Adapter<AdaptadorProducto.Pr
         return productos.size();
     }
 
-    //Clase ProductoViewHolder para representar los elementos de la vista
+    //Clase ProductoViewHolder para representar los elementos de la vista en el RecyclerView
     public static class ProductoViewHolder extends RecyclerView.ViewHolder {
         TextView tvNombreProducto, tvCantidad, tvPrecio;
 
