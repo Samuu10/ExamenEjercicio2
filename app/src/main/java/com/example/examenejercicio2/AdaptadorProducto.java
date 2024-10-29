@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ public class AdaptadorProducto extends RecyclerView.Adapter<AdaptadorProducto.Pr
     private Context context;
     private RepositorioProducto repositorioProducto;
     private TextView tvTotal;
+    private OnItemClickListener onItemClickListener;
 
     //Constructor
     public AdaptadorProducto(List<Producto> productos, Context context, RepositorioProducto repositorioProducto, TextView tvTotal) {
@@ -42,9 +44,13 @@ public class AdaptadorProducto extends RecyclerView.Adapter<AdaptadorProducto.Pr
         int cantidad = producto.getCantidad() == 0 ? 1 : producto.getCantidad();
         holder.tvNombreProducto.setText(producto.getNombre());
         holder.tvCantidad.setText("x" + cantidad + "  -");
-        holder.tvPrecio.setText(producto.getPrecio() * cantidad + "€");
+        holder.tvPrecio.setText(producto.getPrecio() + "€");
 
-        holder.itemView.setOnClickListener(v -> mostrarDialogoEliminarProducto(producto, position));
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(producto);
+            }
+        });
     }
 
     //Método getItemCount para obtener la cantidad de productos en la lista
@@ -65,26 +71,20 @@ public class AdaptadorProducto extends RecyclerView.Adapter<AdaptadorProducto.Pr
         }
     }
 
-    //Método para mostrar el diálogo de confirmación de eliminación
-    private void mostrarDialogoEliminarProducto(Producto producto, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Eliminar Producto");
-        builder.setMessage("¿Estás seguro de que deseas eliminar este producto?");
-        builder.setPositiveButton("Eliminar", (dialog, which) -> {
-            repositorioProducto.eliminarProducto(producto);
-            productos.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, productos.size());
-            actualizarTotal();
-        });
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
-        builder.create().show();
-    }
-
     //Método para actualizar el total de productos y precio
     private void actualizarTotal() {
         int numeroDeProductos = repositorioProducto.obtenerNumeroDeProductos();
         double precioTotal = repositorioProducto.obtenerPrecioTotal();
         tvTotal.setText("Productos: " + numeroDeProductos + " - Total: " + precioTotal + "€");
+    }
+
+    //Interfaz para manejar el clic en el ítem del producto
+    public interface OnItemClickListener {
+        void onItemClick(Producto producto);
+    }
+
+    //Método para asignar el clic en el ítem del producto
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

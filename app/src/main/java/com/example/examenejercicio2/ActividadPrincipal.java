@@ -40,6 +40,8 @@ public class ActividadPrincipal extends AppCompatActivity {
                 mostrarDialogoAgregarProducto();
             }
         });
+
+        adaptadorProducto.setOnItemClickListener(producto -> mostrarDialogoEliminarProducto(producto));
     }
 
     private void mostrarDialogoAgregarProducto() {
@@ -77,6 +79,22 @@ public class ActividadPrincipal extends AppCompatActivity {
         });
     }
 
+    //Método para mostrar un diálogo de eliminación de un producto
+    private void mostrarDialogoEliminarProducto(Producto producto) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Eliminar Producto");
+        builder.setMessage("¿Estás seguro de que deseas eliminar este producto?");
+        builder.setPositiveButton("Eliminar", (dialog, which) -> {
+            repositorioProducto.eliminarProducto(producto);
+            adaptadorProducto.notifyDataSetChanged();
+            actualizarTotal();
+            dialog.dismiss();
+        });
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
+
+    //Método para actualizar el total de productos y precio
     private void actualizarTotal() {
         int numeroDeProductos = repositorioProducto.obtenerNumeroDeProductos();
         double precioTotal = repositorioProducto.obtenerPrecioTotal();
